@@ -73,3 +73,27 @@ tidy_df %>%
 
 This plot suggests high within-subject correlation -- subjects who start above average end up above average, and those that start below average end up below average. Subjects in the control group generally don't change over time, but those in the experiment group increase their outcome in a roughly linear way. 
 
+## Problem 2
+```{r}
+homicide <- read_csv("https://raw.githubusercontent.com/washingtonpost/data-homicides/master/homicide-data.csv")
+head(homicide)
+```
+The dataset has `r nrow(homicide)` observations and `r ncol(homicide)` variables. Each observation is a homicide case, along with the case number, reported date, victim's first and last names, race, age, and sex, the location of the case (city, state, latitude, and longitude), and the disposition of the case.  
+
+- create a city-state variable
+```{r}
+homicide = homicide %>%
+  mutate(city_state = str_c(city, state, sep = ", "))
+head(homicide)
+```
+
+Summarize within cities to get the total count of homicides and the total count of unsolved homicides.
+```{r}
+summary = homicide %>%
+  group_by(city_state) %>%
+  summarize(total_count = n(),
+            unsolved_cases = sum(disposition %in% c("Closed without arrest", "Open/No arrest"))) %>% 
+ filter(city_state != "Tulsa, AL") 
+summary
+```
+
