@@ -128,3 +128,28 @@ ggplot(city_proptests,
   labs(title = "Estimated proportion and CI of unsolved homicides by city",
        x = "proportion of unsolved murders", y = "city_state")
 ```
+
+## Problem 3
+- set the variable
+```{r}
+#devtools::install_github("simsem/simsem/simsem")
+n = 30
+sigma = 5
+```
+
+generate 5000 datasets from the normal distribution. For each dataset, save the estimate $\hat \mu$ and the p-value arising from a test of H: $\mu = 0$ using $\alpha = 0.05$. 
+```{r}
+mu = 0
+sim_results_mu_0 = 
+  expand_grid(mu = mu, 
+              iter = 1:5000) %>%
+  mutate(sample = map(.x = mu, ~rnorm(n, .x, sigma))) %>%
+  mutate(estimate_df = map(.x = sample, 
+                           ~broom::tidy(t.test(.x, 
+                                               alternative = "two.sided",
+                                               conf.level = 0.95)))) %>%
+  unnest(estimate_df) %>%
+  select(mu, iter, estimate, p.value)
+sim_results_mu_0
+```
+
