@@ -97,6 +97,8 @@ summary = homicide %>%
 summary
 ```
 
+Since Tulsa, Al is a wrong combination of city_state, we choose to eliminate it.
+
 For the city of Baltimore, MD. We use the prop.test function to estimate the proportion of homicides that are unsolved
 ```{r}
 baltimore = summary %>%
@@ -181,7 +183,7 @@ null_rejected
 
 The power increases as mu increases. When the true mean is close to 0, the power is low: when effect size(mu) is 1, the power is about 0.125. When mu is above 4, the power is getting closer and closer to 1.
 
-- A plot showing the average estimate of mu hat on the y axis and the true value of mu on the x axis. 
+- A plot showing the average estimate of $\hat \mu$ on the y axis and the true value of mu on the x axis. 
 ```{r}
 mu_average = sim_results_mu_1to6 %>%
   group_by(mu) %>%
@@ -194,7 +196,7 @@ mu_average
 From the plot above, we can see that the average of all estimate u hat
 is roughly equals to the true mean. This also follows our expectation about normal distribution.
 
-Make a second plot (or overlay on the first) the average estimate of mu hat only in samples for which the null was rejected on the y axis and the true value of mu on the x axis.
+Make a second plot (or overlay on the first) the average estimate of $\hat \mu$ only in samples for which the null was rejected on the y axis and the true value of mu on the x axis.
 
 ```{r}
 null_average = sim_results_mu_1to6 %>%
@@ -206,7 +208,7 @@ null_average = sim_results_mu_1to6 %>%
 null_average
 ```
 
-From the plot above, we can see that the sample average of mu hat for which the null was rejected does not roughly equal to the true mean when 
-mu is small. However, when the effect size is large(mu >= 4), the sample average of mu hat for which the null was rejected is roughly equal to the true mean.
+From the plot above, we can see that the sample average of $\hat \mu$ for which the null was rejected does not roughly equal to the true mean when 
+mu is small. However, when the effect size is large($\mu$ >= 4), the sample average of $\hat \mu$ for which the null was rejected is roughly equal to the true mean.
 
-This difference might be due to the relationship between effect size and power we find before: when the effect size is small, the power is low, which means that the test only has a small chance of detecting a true effect or that the results are likely to be distorted by random and systematic error. In this case the t test is more likely to fail to reject the null(type 2 error). However, when the effect size is large, the power is high, so the t test are more capable of correctly rejecting the null. As a result, the number of mu hat from samples where the null was not rejected when it should is small As we compute the average estimate of mu hat only in samples for which the null was rejected and remove those whose null was reject removing them does not move the average of mu hat away from the the true value much.
+This difference might be due to the relationship between effect size and power we find before: when the effect size is small, the power is low, which means that the test only has a small chance of detecting a true effect or that the results are likely to be distorted by random and systematic error. In this case the t test is more likely to fail to reject the null(type 2 error). However, when the effect size is large, the power is high, so the t test are more capable of correctly rejecting the null. As a result, the number of $\hat \mu$ from samples where the null was not rejected when it should is small As we compute the average estimate of $\hat \mu$ only in samples for which the null was rejected and remove those whose null was reject removing them does not move the average of $\hat \mu$ away from the the true value much.
