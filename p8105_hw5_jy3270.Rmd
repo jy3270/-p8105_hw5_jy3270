@@ -97,3 +97,34 @@ summary = homicide %>%
 summary
 ```
 
+For the city of Baltimore, MD. We use the prop.test function to estimate the proportion of homicides that are unsolved
+```{r}
+baltimore = summary %>%
+  filter(city_state == "Baltimore, MD") 
+  
+baltimore_proptest = prop.test(baltimore$unsolved_cases, baltimore$total_count) %>% 
+  broom::tidy() %>%
+  select(estimate, conf.low, conf.high) 
+baltimore_proptest
+```
+For all the cities
+```{r}
+city_proptests = 
+  purrr::map2_df(.x = summary$unsolved_cases,
+            .y = summary$total_count,
+            ~broom::tidy(prop.test(.x, .y))) %>%
+  select(estimate, conf.low, conf.high) %>%
+  mutate(city_state = summary$city_state) %>%
+  relocate(city_state)
+city_proptests
+```
+
+Create a plot that shows the estimates and CIs for each city 
+```{r}
+ggplot(city_proptests, 
+       aes(x = estimate, y = fct_reorder(city_state, estimate, .desc=F))) +
+  geom_col() +
+  geom_errorbar(aes(xmin = conf.low, xmax = conf.high)) + 
+  labs(title = "Estimated proportion and CI of unsolved homicides by city",
+       x = "proportion of unsolved murders", y = "city_state")
+```
